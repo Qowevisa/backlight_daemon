@@ -1,10 +1,12 @@
 CC = gcc
 CFLAGS = -g -O2 -Wall -Wextra -Werror -pedantic
-project_name = tt
+daemon = lghtd
+server = server
 client = client
 
-build: 
-	$(CC) -o $(project_name) $(project_name).c $(CFLAGS)
+build:
+	$(CC) -o $(daemon) $(daemon).c $(CFLAGS)
+	$(CC) -o $(server) $(server).c $(CFLAGS)
 	$(CC) -o $(client) $(client).c $(CFLAGS)
 
 clean: 

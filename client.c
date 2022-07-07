@@ -18,13 +18,17 @@
 
 #define SERVER_PATH "tpf_unix_sock.server"
 #define CLIENT_PATH "tpf_unix_sock.client"
-#define DATA "Hello from client"
 
 int sock_errno(void);
 int unlink(const char *path);
 int close(int socket);
 
-int main(void){
+int main(int argc, char *argv[])
+{
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <STRING>\n", argv[0]);
+        return 1;
+    }
 
     int client_sock, rc, len;
     struct sockaddr_un server_sockaddr; 
@@ -80,7 +84,8 @@ int main(void){
     /* Copy the data to the buffer and  */
     /* send it to the server socket.    */
     /************************************/
-    strcpy(buf, DATA);                 
+    memset(buf, 0, 256);
+    strncat(buf, argv[1], 255);
     printf("Sending data...\n");
     rc = send(client_sock, buf, strlen(buf), 0);
     if (rc == -1) {
@@ -92,22 +97,6 @@ int main(void){
         printf("Data sent!\n");
     }
 
-    /**************************************/
-    /* Read the data sent from the server */
-    /* and print it.                      */
-    /**************************************/
-    printf("Waiting to recieve data...\n");
-    memset(buf, 0, sizeof(buf));
-    rc = recv(client_sock, buf, sizeof(buf), MSG_WAITALL);
-    if (rc == -1) {
-        printf("RECV ERROR = %s\n", strerror(errno));
-        close(client_sock);
-        exit(1);
-    }   
-    else {
-        printf("DATA RECEIVED = %s\n", buf);
-    }
-    
     /******************************/
     /* Close the socket and exit. */
     /******************************/
