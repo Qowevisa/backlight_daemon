@@ -16,12 +16,20 @@
 #define _XOPEN_SOURCE_EXTENDED 1
 #include <unistd.h>
 
-#define SERVER_PATH "tpf_unix_sock.server"
-#define CLIENT_PATH "tpf_unix_sock.client"
+#define SOCK_DIR "/tmp/backligh_controller"
+#define SERVER_PATH "/tmp/backligh_controller/tpf_unix_sock.server"
+#define CLIENT_PATH "/tmp/backligh_controller/tpf_unix_sock.client"
 
 int sock_errno(void);
 int unlink(const char *path);
 int close(int socket);
+
+void remove_file()
+{
+    if (remove(CLIENT_PATH) != 0) {
+        perror("remove()");
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +37,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Usage: %s <STRING>\n", argv[0]);
         return 1;
     }
+    atexit(remove_file);
 
     int client_sock, rc, len;
     struct sockaddr_un server_sockaddr; 

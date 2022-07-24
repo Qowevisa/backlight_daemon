@@ -6,6 +6,9 @@
 #include <errno.h>
 #include <string.h>
 
+// Signal handling
+#include <signal.h>
+
 // IBM socket example
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -16,20 +19,33 @@
 // readdir
 #include <dirent.h>
 
-#define SOCK_PATH  "tpf_unix_sock.server"
+#define SOCK_DIR "/tmp/backligh_controller"
+#define SOCK_PATH  "/tmp/backligh_controller/tpf_unix_sock.server"
 
 #define MSGSIZE 32
 
-int main() {
+void remove_dir()
+{
+    remove(SOCK_PATH);
+    rmdir(SOCK_DIR);
+}
+
+void sigint_handler()
+{
+    exit(0);
+}
+
+int main()
+{
+    signal(SIGINT, sigint_handler);
     int p[2];
     char msg[MSGSIZE];
     if (pipe(p) < 0) {
         perror("pipe()");
         return 1;
     }
-    printf("before setuid(), uid=%d, effective uid=%d\n",
-         (int) getuid(), (int) geteuid());
 
+    atexit(remove_dir);
     pid_t id = fork();
     if (id == 0) {
         // child
@@ -60,6 +76,11 @@ int main() {
         if (setuid(1000) != 0) {
             perror("setuid() error");
             return 1;
+        }
+
+        struct stat st = {0};
+        if (stat(SOCK_DIR, &st) == -1) {
+            mkdir(SOCK_DIR, 0777);
         }
 
         /***************************************/
@@ -258,10 +279,12 @@ int main() {
                 }
                 break;
             } else if (strcmp(msg, "max") == 0) {
+                brightness_value = max_brightness_value;
                 fseek(brightness_file, 0, SEEK_SET);
-                fprintf(brightness_file, "%u\n", max_brightness_value);
+                fprintf(brightness_file, "%u\n", brightness_value);
                 fflush(brightness_file);
             } else if (strcmp(msg, "min") == 0) {
+                brightness_value = 0;
                 fseek(brightness_file, 0, SEEK_SET);
                 fprintf(brightness_file, "0\n");
                 fflush(brightness_file);
