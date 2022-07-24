@@ -3,6 +3,10 @@ CFLAGS = -g -O2 -Wall -Wextra -Werror -pedantic
 daemon = lghtd
 server = server
 client = client
+time = time
+
+test:
+	$(CC) -o $(time) $(time).c $(CFLAGS)
 
 build:
 	$(CC) -o $(daemon) $(daemon).c $(CFLAGS)
