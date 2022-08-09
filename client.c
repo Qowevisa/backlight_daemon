@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     /************************************/
     memset(buf, 0, 256);
     strncat(buf, argv[1], 255);
-    printf("Sending data...\n");
+    // printf("Sending data...\n");
     rc = send(client_sock, buf, strlen(buf), 0);
     if (rc == -1) {
         printf("SEND ERROR = %s\n", strerror(errno));
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
         exit(1);
     }   
     else {
-        printf("Data sent!\n");
+        // printf("Data sent!\n");
     }
 
     /******************************/

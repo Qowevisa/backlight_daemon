@@ -82,9 +82,10 @@ void pretty_time(char *time_str)
     uint8_t sec    =  seconds_for_year % 60;
     hour += 3; // UTC diff
     hour %= 24;
-    snprintf(time_str, TIME_LEN - 1, "%s %u %u%u:%u%u:%u%u",
+    snprintf(time_str, TIME_LEN - 1, "%s %u%u %u%u:%u%u:%u%u",
             months_names[month - 1],
-            day,
+            day / 10,
+            day % 10,
             hour / 10,
             hour % 10,
             min / 10,
