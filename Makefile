@@ -5,15 +5,16 @@ server = server
 client = client
 time = time
 
-test:
-	$(CC) -o $(time) $(time).c $(CFLAGS)
-
 build:
 	$(CC) -o $(daemon) $(daemon).c $(CFLAGS)
 	$(CC) -o $(server) $(server).c $(CFLAGS)
 	$(CC) -o $(client) $(client).c $(CFLAGS)
+	$(CC) -o $(time) $(time).c $(CFLAGS)
 
 clean: 
 	-rm $(project_name) $(client) 2> /dev/null
+
+tarball:
+	tar -czvf daemon.tar.gz $(daemon).c $(server).c $(client).c $(time).c Makefile
 
 .PHONY: build clean
