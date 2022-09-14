@@ -1,27 +1,6 @@
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
-#include <syslog.h>
-#include <string.h>
 #include <time.h>
-
-// Signal handling
-#include <signal.h>
-
-// IBM socket example
-#include <sys/socket.h>
-#include <sys/un.h>
-
-// Wait
-#include <sys/wait.h>
-
-// readdir
-#include <dirent.h>
 
 #define TIME_LEN 64
 
