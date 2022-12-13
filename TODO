@@ -1,0 +1,11 @@
+add commands like
+
+inc 20
+dec 30
+
+set 50
+set 70
+set 65
+get
+
+set 33
