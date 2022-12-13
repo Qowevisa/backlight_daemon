@@ -528,15 +528,19 @@ int main()
                 fprintf(brightness_file, "0\n");
                 fflush(brightness_file);
             } else if (strcmp(msg, "dec") == 0) {
-                brightness_value -= ( (unsigned int) max_brightness_value / 10);
-                fseek(brightness_file, 0, SEEK_SET);
-                fprintf(brightness_file, "%u\n", brightness_value);
-                fflush(brightness_file);
+                if (brightness_value > 0) {
+                    brightness_value -= ( (unsigned int) max_brightness_value / 10);
+                    fseek(brightness_file, 0, SEEK_SET);
+                    fprintf(brightness_file, "%u\n", brightness_value);
+                    fflush(brightness_file);
+                }
             } else if (strcmp(msg, "inc") == 0) {
-                brightness_value += ( (unsigned int) max_brightness_value / 10);
-                fseek(brightness_file, 0, SEEK_SET);
-                fprintf(brightness_file, "%u\n", brightness_value);
-                fflush(brightness_file);
+                if (brightness_value < max_brightness_value) {
+                    brightness_value += ( (unsigned int) max_brightness_value / 10);
+                    fseek(brightness_file, 0, SEEK_SET);
+                    fprintf(brightness_file, "%u\n", brightness_value);
+                    fflush(brightness_file);
+                }
             }
         }
     }
