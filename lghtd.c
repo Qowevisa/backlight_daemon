@@ -358,6 +358,10 @@ int main()
                 write(p[1], buf, MSGSIZE);
             } else if (strcmp(buf, "inc") == 0) {
                 write(p[1], buf, MSGSIZE);
+            } else if (strcmp(buf, "get") == 0) {
+                write(p[1], buf, MSGSIZE);
+            } else if (strcmp(buf, "set") == 0) {
+                write(p[1], buf, MSGSIZE);
             }
         }
         
