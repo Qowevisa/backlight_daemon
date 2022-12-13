@@ -31,6 +31,8 @@ void remove_file()
     }
 }
 
+#define BUF_LEN 1024
+
 int main(int argc, char *argv[])
 {
     if (argc < 2) {
@@ -42,7 +44,7 @@ int main(int argc, char *argv[])
     int client_sock, rc, len;
     struct sockaddr_un server_sockaddr; 
     struct sockaddr_un client_sockaddr; 
-    char buf[256];
+    char buf[BUF_LEN];
     memset(&server_sockaddr, 0, sizeof(struct sockaddr_un));
     memset(&client_sockaddr, 0, sizeof(struct sockaddr_un));
      
@@ -93,8 +95,8 @@ int main(int argc, char *argv[])
     /* Copy the data to the buffer and  */
     /* send it to the server socket.    */
     /************************************/
-    memset(buf, 0, 256);
-    strncat(buf, argv[1], 255);
+    memset(buf, 0, BUF_LEN);
+    strncat(buf, argv[1], BUF_LEN - 1);
     // printf("Sending data...\n");
     rc = send(client_sock, buf, strlen(buf), 0);
     if (rc == -1) {
