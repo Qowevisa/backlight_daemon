@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
@@ -32,6 +33,9 @@ void remove_file()
 }
 
 #define BUF_LEN 1024
+#define ARG_NUM 8
+#define ARG_LEN ((BUF_LEN / ARG_NUM) - 1)
+#define ARG_LAST (argc - 1)
 
 int main(int argc, char *argv[])
 {
@@ -96,7 +100,13 @@ int main(int argc, char *argv[])
     /* send it to the server socket.    */
     /************************************/
     memset(buf, 0, BUF_LEN);
-    strncat(buf, argv[1], BUF_LEN - 1);
+    for (int i = 1; i < argc; i++) {
+        strncat(buf, argv[i], ARG_LEN);
+        strcat(buf, " ");
+        if (i == ARG_NUM) {
+            break;
+        }
+    }
     // printf("Sending data...\n");
     rc = send(client_sock, buf, strlen(buf), 0);
     if (rc == -1) {
